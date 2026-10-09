@@ -2,7 +2,7 @@
 <a href="www.linkedin.com/in/wayne-dumais"><img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
 
 
-I am a recent CySA+ graduate with an interest in Information Security and a dedication to solving complex problems and staying curious.
+I am a recent CySA+ graduate with an interest in Information Security and a dedication to solving complex problems and staying curious. With a background in Human Services and armed with CompTIA A+, Network+, Security+ and CySA+ qualifications, I bridge the gap between technical security and human risk. Actively seeking a GRC or Security Operations Centre role where I can leverage my workplace maturity, communication skills, and rapid technical aptitude to protect and support a values-driven team.
 
 ## Objective
 
@@ -12,6 +12,7 @@ My journey in computer science has led me to develop a passion for cybersecurity
 
 | Skill                                         | Associated Project         |
 |-----------------------------------------------|----------------------------|
+| Phishing Email Investigation and Report Writing | <a href="https://google.com">Phishing Email Investigation and Report</a>|
 | SIEM Implementation and Log Analysis          | <a href="https://google.com">Detection Lab</a>|
 | Network Traffic Monitoring and Attack Detection | <a href="https://google.com">Detection Lab</a>|
 | Security Automation with Shuffle SOAR         | SOC Automation Lab|
@@ -44,7 +45,6 @@ My journey in computer science has led me to develop a passion for cybersecurity
 </div>
 
 ## Certifications
-[Provide certifications that you have obtained. Use ChatGPT to help create the link - Remove this afterwards]]
 <div>
 <img src="https://img.shields.io/badge/CompTIA-CySA%2B-FF0000?style=for-the-badge&logo=comptia&logoColor=white" alt="CompTIA CySA+ Badge" />
 <img src="https://img.shields.io/badge/-Security%2B-FF0000?&style=for-the-badge&logo=CompTIA&logoColor=white" />
@@ -54,5 +54,6 @@ My journey in computer science has led me to develop a passion for cybersecurity
 </div>
 
 ## Projects
+- Phishing Analysis and Report
 - Detection Lab
 - SOC Automation Project
