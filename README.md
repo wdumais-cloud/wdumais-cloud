@@ -12,7 +12,7 @@ My journey in computer science has led me to develop a passion for cybersecurity
 
 | Skill                                         | Associated Project         |
 |-----------------------------------------------|----------------------------|
-| Phishing Email Investigation and Report Writing | <a href="https://google.com">Phishing Email Investigation and Report</a>|
+| Phishing Email Investigation and Report Writing | <a href="https://[https://github.com/wdumais-cloud/phishing-analysis-lab]">Phishing Email Investigation and Report</a>|
 | SIEM Implementation and Log Analysis          | <a href="https://google.com">Detection Lab</a>|
 | Network Traffic Monitoring and Attack Detection | <a href="https://google.com">Detection Lab</a>|
 | Security Automation with Shuffle SOAR         | SOC Automation Lab|
