@@ -114,8 +114,8 @@
 </head>
 <body class="min-h-screen flex flex-col relative pb-12 selection:bg-term-black selection:text-term-bg">
 
-    <div class="scanlines"></div>
-    <div class="crt-overlay"></div>
+    <div id="scanlineLayer" class="scanlines"></div>
+    <div id="crtOverlayLayer" class="crt-overlay"></div>
 
     <header class="sticky top-0 z-40 bg-term-bg border-b-4 border-term-black px-4 py-3 shadow-md">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
@@ -189,7 +189,7 @@
                 <!-- Terminal Content Box -->
                 <div class="p-4 font-mono text-xs md:text-sm space-y-3 flex-grow overflow-y-auto max-h-[280px]" id="terminalBody">
                     <div>
-                        <span class="text-term-glow">root@cyber-node:~#</span> cat welcome.txt
+                        <span class="text-term-bg font-bold">root@cyber-node:~#</span> cat welcome.txt
                         <p class="mt-1 text-term-bg font-medium opacity-90">
                             Welcome to CyberLabs v2.04. All systems operational. Click commands below to execute diagnostic queries.
                         </p>
@@ -197,7 +197,7 @@
 
                     <div id="terminalOutput"></div>
 
-                    <div class="flex items-center text-term-glow font-bold">
+                    <div class="flex items-center text-term-bg font-bold">
                         <span>root@cyber-node:~#&nbsp;</span>
                         <span id="terminalPromptInput"></span>
                         <span class="w-2.5 h-4 bg-term-bg inline-block ml-1 cursor-blink"></span>
@@ -392,10 +392,10 @@
 
                     <div class="space-y-4">
                         <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
                         </div>
 
                         <button onclick="openModal('C2 Infrastructure Guide', 'Hardening redirectors and setting up domain fronting for red team operations.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
@@ -421,10 +421,10 @@
 
                     <div class="space-y-4">
                         <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMING SOON</span>
                         </div>
 
                         <button onclick="openModal('Kubernetes Security Audit', 'Falco policy YAML configurations and container escape benchmark tests.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
@@ -449,7 +449,7 @@
                 <div class="border-4 border-term-black bg-term-black text-term-bg p-4 retro-box space-y-3">
                     <div class="flex justify-between items-center text-xs font-bold text-term-bg border-b border-term-bg/40 pb-2">
                         <span>[SNIPPET_01] Linux Process Privilege Audit</span>
-                        <button onclick="copySnippet('snippet1', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-glow font-bold text-[10px]">
+                        <button onclick="copySnippet('snippet1', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-bgDark font-bold text-[10px]">
                             COPY
                         </button>
                     </div>
@@ -464,7 +464,7 @@ ss -tulpn | grep ESTAB</code></pre>
                 <div class="border-4 border-term-black bg-term-black text-term-bg p-4 retro-box space-y-3">
                     <div class="flex justify-between items-center text-xs font-bold text-term-bg border-b border-term-bg/40 pb-2">
                         <span>[SNIPPET_02] Windows Sysmon Suspicious PowerShell</span>
-                        <button onclick="copySnippet('snippet2', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-glow font-bold text-[10px]">
+                        <button onclick="copySnippet('snippet2', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-bgDark font-bold text-[10px]">
                             COPY
                         </button>
                     </div>
@@ -495,7 +495,7 @@ index=win_logs EventCode=4688 OR EventCode=1
                 <button onclick="closeModal()" class="px-4 py-2 border-2 border-term-black bg-term-bg hover:bg-term-black hover:text-term-bg font-bold text-xs">
                     RETURN
                 </button>
-                <a id="modalGithubLink" href="#" target="_blank" class="px-4 py-2 border-2 border-term-black bg-term-black text-term-bg hover:bg-term-bg hover:text-term-black font-bold text-xs inline-block">
+                <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border-2 border-term-black bg-term-black text-term-bg hover:bg-term-bg hover:text-term-black font-bold text-xs inline-block">
                     VIEW_GITHUB_REPO ►
                 </a>
             </div>
@@ -508,10 +508,10 @@ index=win_logs EventCode=4688 OR EventCode=1
                 © 2026 WAYNE_DUMAIS // RETRO_CONSOLE_PORTFOLIO
             </div>
             <div class="flex space-x-4">
-                <a href="https://github.com/wdumais-cloud/wdumais-cloud" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">GITHUB</a>
-                <a href="https://www.linkedin.com/in/wayne-dumais" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">LINKEDIN</a>
-                <a href="https://www.skool.com/mydfir" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">THEFORGE</a>
-                <a href="https://www.skool.com/signup?ref=9f708ec2eaf84771b394724193483962" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">AFFILIATE</a>
+                <a href="https://github.com/wdumais-cloud/wdumais-cloud" target="_blank" rel="noopener noreferrer" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">GITHUB</a>
+                <a href="https://www.linkedin.com/in/wayne-dumais" target="_blank" rel="noopener noreferrer" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">LINKEDIN</a>
+                <a href="https://www.skool.com/mydfir" target="_blank" rel="noopener noreferrer" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">THEFORGE</a>
+                <a href="https://www.skool.com/signup?ref=9f708ec2eaf84771b394724193483962" target="_blank" rel="noopener noreferrer" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">AFFILIATE</a>
             </div>
         </div>
     </footer>
@@ -521,20 +521,18 @@ index=win_logs EventCode=4688 OR EventCode=1
         const commandMap = {
             'whoami': 'OPERATOR: Wayne Dumais | SEC_ROLE: Security Operations Centre Analyst',
             'sysinfo': 'OS: Retro-Cyber-OS v2.04 | ARCH: x86_64 | UPTIME: 99.98% | STATUS: NOMINAL',
-            'certifications': 'CERTIFICATIONS: CompTIA A+, CompTIA NETWORK+, CompTIA SECURITY+, CompTIA CYSA+',
-            'certs': 'CERTIFICATIONS: CompTIA A+, CompTIA NETWORK+, CompTIA SECURITY+, CompTIA CYSA+'
+            'certifications': 'CERTIFICATIONS: CompTIA Security+, Network+, CySA+',
+            'certs': 'CERTIFICATIONS: CompTIA Security+, Network+, CySA+'
         };
 
         function runCommand(cmd) {
             const outputContainer = document.getElementById('terminalOutput');
             const promptInput = document.getElementById('terminalPromptInput');
+            const terminalBody = document.getElementById('terminalBody');
             
             promptInput.innerText = cmd;
 
             setTimeout(() => {
-                const newEntry = document.createElement('div');
-                newEntry.className = "space-y-1 mb-2";
-
                 if (cmd === 'clear') {
                     outputContainer.innerHTML = '';
                     promptInput.innerText = '';
@@ -543,27 +541,28 @@ index=win_logs EventCode=4688 OR EventCode=1
 
                 const response = commandMap[cmd] || `Command not recognized: '${cmd}'. Available: whoami, sysinfo, certs, clear`;
                 
+                const newEntry = document.createElement('div');
+                newEntry.className = "space-y-1 mb-2";
                 newEntry.innerHTML = `
-                    <div><span class="text-term-glow">root@cyber-node:~#</span> ${cmd}</div>
-                    <div class="text-term-bg opacity-90 pl-3 font-semibold">► ${response}</div>
+                    <div class="text-term-bg font-bold">root@cyber-node:~# ${cmd}</div>
+                    <div class="text-term-bg opacity-90 pl-2 border-l border-term-bg/40">${response}</div>
                 `;
 
                 outputContainer.appendChild(newEntry);
                 promptInput.innerText = '';
-
-                // Scroll terminal to bottom
-                const termBody = document.getElementById('terminalBody');
-                termBody.scrollTop = termBody.scrollHeight;
-            }, 180);
+                
+                // Auto-scroll terminal output container to bottom
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }, 120);
         }
 
-        // 2. Filter Category Handler
+        // 2. Category Filter Mechanics
         function filterLabs(category) {
             const cards = document.querySelectorAll('.lab-card');
             const buttons = document.querySelectorAll('.filter-btn');
 
             buttons.forEach(btn => {
-                if(btn.getAttribute('data-filter') === category) {
+                if (btn.getAttribute('data-filter') === category) {
                     btn.classList.add('bg-term-black', 'text-term-bg');
                     btn.classList.remove('bg-term-bg', 'text-term-black');
                 } else {
@@ -595,21 +594,35 @@ index=win_logs EventCode=4688 OR EventCode=1
 
         // 4. Copy Code Snippet Handler
         function copySnippet(elementId, btnElement) {
-            const codeText = document.getElementById(elementId).innerText;
-            
-            // Clipboard fallback strategy
-            const textarea = document.createElement('textarea');
-            textarea.value = codeText;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btnElement.innerText;
+                btnElement.innerText = 'COPIED!';
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                }, 1500);
+            });
+        }
 
-            const originalText = btnElement.innerText;
-            btnElement.innerText = "COPIED!";
-            btnElement.classList.add('bg-term-glow');
+        // 5. CRT Overlay Toggle Handler
+        let crtEnabled = true;
+        function toggleCRT() {
+            const scanlines = document.getElementById('scanlineLayer');
+            const crtOverlay = document.getElementById('crtOverlayLayer');
+            const toggleBtn = document.getElementById('crtToggleBtn');
 
-            setTimeout(() => {
-                btnElement.innerText = originalText;
-                btnElement.classList.remove('bg-term-glow');
-            }, 1500);
+            crtEnabled = !crtEnabled;
+
+            if (crtEnabled) {
+                scanlines.style.display = 'block';
+                crtOverlay.style.display = 'block';
+                toggleBtn.innerText = '[CRT: ON]';
+            } else {
+                scanlines.style.display = 'none';
+                crtOverlay.style.display = 'none';
+                toggleBtn.innerText = '[CRT: OFF]';
+            }
+        }
+    </script>
+</body>
+</html>
