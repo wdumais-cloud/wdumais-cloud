@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS_ADMIN // Cyber Security Lab Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        term: {
+                            bg: '#1aed38',        /* Bright retro matrix green */
+                            bgDark: '#12b829',    /* Darker green for depth */
+                            bgDeep: '#0d801d',    /* Deep green background */
+                            black: '#050c06',     /* Pitch black for text/contrast */
+                            cardBg: '#15cf31',    /* Card interior background */
+                            border: '#000000',    /* Crisp black borders */
+                            glow: '#24ff45',      /* Neon glow */
+                            dim: '#187a25'        /* Dim green accent */
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Fira Code"', 'monospace'],
+                        crt: ['"VT323"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #16cf31;
+            color: #050c06;
+            font-family: 'Fira Code', monospace;
+            text-shadow: 0 0 2px rgba(5, 12, 6, 0.4);
+        }
+
+        /* Scanline Overlay Effect */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.15) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 50;
+            opacity: 0.85;
+        }
+
+        /* Vignette CRT Screen Curve Feel */
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.35);
+            z-index: 51;
+        }
+
+        /* Cursor blinking animation */
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+
+        /* Tactical Retro Card Shadows */
+        .retro-box {
+            box-shadow: 5px 5px 0px #050c06;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .retro-box:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px #050c06;
+        }
+
+        .retro-button {
+            box-shadow: 3px 3px 0px #050c06;
+            transition: all 0.15s ease;
+        }
+
+        .retro-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #050c06;
+        }
+
+        .retro-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #050c06;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12b829;
+            border: 1px solid #050c06;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #050c06;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative pb-12 selection:bg-term-black selection:text-term-bg">
+
+    <div class="scanlines"></div>
+    <div class="crt-overlay"></div>
+
+    <header class="sticky top-0 z-40 bg-term-bg border-b-4 border-term-black px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <!-- Brand Logo / Title -->
+            <div class="flex items-center space-x-3">
+                <div class="w-4 h-4 bg-term-black animate-pulse"></div>
+                <a href="#" class="font-crt text-3xl font-bold tracking-wider hover:opacity-80">
+                    CYBER_LABS://v2.04
+                </a>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex items-center space-x-2 text-sm font-bold">
+                <a href="#about" class="px-3 py-1 border-2 border-term-black bg-term-bg hover:bg-term-black hover:text-term-bg transition">/SYSTEM</a>
+                <a href="#labs" class="px-3 py-1 border-2 border-term-black bg-term-black text-term-bg transition">/LABS</a>
+                <a href="#vault" class="px-3 py-1 border-2 border-term-black bg-term-bg hover:bg-term-black hover:text-term-bg transition">/PLAYBOOKS</a>
+                <button onclick="toggleCRT()" id="crtToggleBtn" class="px-3 py-1 border-2 border-term-black bg-term-bg hover:bg-term-black hover:text-term-bg text-xs flex items-center gap-1">
+                    [CRT: ON]
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 mt-8 flex-grow space-y-12 w-full">
+
+        <section id="about" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- Hero Left Intro Box -->
+            <div class="lg:col-span-5 border-4 border-term-black bg-term-bg p-6 retro-box flex flex-col justify-between">
+                <div>
+                    <div class="inline-block px-2 py-0.5 bg-term-black text-term-bg text-xs font-bold mb-3 uppercase">
+                        SOC_ANALYST
+                    </div>
+                    <h1 class="font-crt text-5xl font-extrabold leading-none mb-4">
+                        WAYNE_DUMAIS
+                    </h1>
+                    <p class="text-sm leading-relaxed mb-4 font-semibold">
+                        With a background in Human Services, I bridge the gap between technical security and human risk. Actively seeking a GRC or Security Operations Centre role where I can leverage my workplace maturity, communication skills, and rapid technical aptitude to protect and support a values-driven team.
+                    </p>
+                </div>
+
+                <div class="space-y-2 pt-4 border-t-2 border-term-black">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>CLEARANCE_LEVEL:</span>
+                        <span>TOP_SECRET // L5</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>STATUS:</span>
+                        <span class="bg-term-black text-term-bg px-1">ACTIVE_MONITORING</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>TARGET_SCOPE:</span>
+                        <span>CLOUD / AD / SIEM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right Live Interactive Terminal -->
+            <div class="lg:col-span-7 border-4 border-term-black bg-term-black text-term-bg rounded-none retro-box flex flex-col">
+                <!-- Terminal Title Bar -->
+                <div class="bg-term-bg text-term-black px-4 py-1.5 font-bold border-b-2 border-term-black flex justify-between items-center text-xs">
+                    <span>SYS_CONSOLE_TTY1 [BASH]</span>
+                    <div class="flex space-x-1">
+                        <span class="w-3 h-3 border border-term-black inline-block bg-term-bg"></span>
+                        <span class="w-3 h-3 border border-term-black inline-block bg-term-bg"></span>
+                        <span class="w-3 h-3 border border-term-black inline-block bg-term-black"></span>
+                    </div>
+                </div>
+
+                <!-- Terminal Content Box -->
+                <div class="p-4 font-mono text-xs md:text-sm space-y-3 flex-grow overflow-y-auto max-h-[280px]" id="terminalBody">
+                    <div>
+                        <span class="text-term-glow">root@cyber-node:~#</span> cat welcome.txt
+                        <p class="mt-1 text-term-bg font-medium opacity-90">
+                            Welcome to CyberLabs v2.04. All systems operational. Click commands below to execute diagnostic queries.
+                        </p>
+                    </div>
+
+                    <div id="terminalOutput"></div>
+
+                    <div class="flex items-center text-term-glow font-bold">
+                        <span>root@cyber-node:~#&nbsp;</span>
+                        <span id="terminalPromptInput"></span>
+                        <span class="w-2.5 h-4 bg-term-bg inline-block ml-1 cursor-blink"></span>
+                    </div>
+                </div>
+
+                <!-- Quick Command Action Buttons -->
+                <div class="bg-term-bg/20 p-2 border-t-2 border-term-black flex flex-wrap gap-2 text-xs">
+                    <button onclick="runCommand('whoami')" class="px-2 py-1 bg-term-bg text-term-black border border-term-black hover:bg-term-black hover:text-term-bg font-bold">
+                        $ whoami
+                    </button>
+                    <button onclick="runCommand('sysinfo')" class="px-2 py-1 bg-term-bg text-term-black border border-term-black hover:bg-term-black hover:text-term-bg font-bold">
+                        $ sysinfo
+                    </button>
+                    <button onclick="runCommand('certifications')" class="px-2 py-1 bg-term-bg text-term-black border border-term-black hover:bg-term-black hover:text-term-bg font-bold">
+                        $ certs
+                    </button>
+                    <button onclick="runCommand('clear')" class="px-2 py-1 bg-term-black text-term-bg border border-term-black hover:bg-term-bg hover:text-term-black font-bold ml-auto">
+                        $ clear
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="labs" class="space-y-6">
+            
+            <!-- Section Title & Filter Controls -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-4 border-term-black pb-4 gap-4">
+                <div>
+                    <h2 class="font-crt text-4xl font-extrabold uppercase tracking-tight flex items-center gap-2">
+                        <span class="text-2xl">►</span> FEATURED_LAB_MODULES
+                    </h2>
+                    <p class="text-xs font-bold uppercase tracking-wider opacity-90">Hands-on threat investigations, reports & enterprise SIEM architecture</p>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap gap-2 text-xs font-bold">
+                    <button onclick="filterLabs('all')" class="filter-btn active px-3 py-1 border-2 border-term-black bg-term-black text-term-bg retro-button" data-filter="all">
+                        ALL_LABS [6]
+                    </button>
+                    <button onclick="filterLabs('blue')" class="filter-btn px-3 py-1 border-2 border-term-black bg-term-bg text-term-black hover:bg-term-black hover:text-term-bg retro-button" data-filter="blue">
+                        DEFENSE // SIEM
+                    </button>
+                    <button onclick="filterLabs('red')" class="filter-btn px-3 py-1 border-2 border-term-black bg-term-bg text-term-black hover:bg-term-black hover:text-term-bg retro-button" data-filter="red">
+                        IDENTITY // MANAGEMENT
+                    </button>
+                    <button onclick="filterLabs('cloud')" class="filter-btn px-3 py-1 border-2 border-term-black bg-term-bg text-term-black hover:bg-term-black hover:text-term-bg retro-button" data-filter="cloud">
+                        CLOUD_SEC
+                    </button>
+                </div>
+            </div>
+
+            <!-- LABS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="labsGrid">
+                
+                <!-- LAB CARD 1 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="blue">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_01 // BLUE
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: MED</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">Phishing Email Investigation & Report</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            Investigated Email Headers, Authentication Results, File Signatures, Conducted OSINT, Examined Metadata & Report Writing.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Tech Badges -->
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">NOTEPAD++</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">HXD</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">EXIFTOOL</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">CYBERCHEF</span>
+                        </div>
+
+                        <!-- Action Link Button -->
+                        <button onclick="openModal('Phishing Email Investigation & Report', 
+            'Detailed breakdown of email header authentication (SPF/DKIM/DMARC), HxD file signature inspection, ExifTool metadata analysis, and OSINT investigation workflow.', 
+            'https://github.com/wdumais-cloud/phishing-analysis-lab')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LAB CARD 2 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="red">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_02 // BLUE
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: MED</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">Active Directory Domain Lab</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            Simulated full AD environment with a range of priveleges through group policy objects and best practice implemented to secure the environment.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Tech Badges -->
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">WINDOWS_SERVER</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">WINDOWS11</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">ACTIVE DIRECTORY</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">TBC</span>
+                        </div>
+
+                        <button onclick="openModal('Active Directory Attack Lab', 'Step-by-step pentest writeup detailing Kerberoasting defense and privilege escalation routes.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LAB CARD 3 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="cloud">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_03 // CLOUD
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: HIGH</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">AWS CloudTrail & GuardDuty Threat Detection</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            Coming Soon.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Tech Badges -->
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">TBC</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">TBC</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">TBC</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">TBC</span>
+                        </div>
+
+                        <button onclick="openModal('AWS Cloud Security Automation', 'Terraform scripts and Python Lambda source code for auto-remediation playbooks.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LAB CARD 4 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="blue">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_04 // BLUE
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: MED</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">T-Pot Multi-Honeypot Decoy Network (Wishlist)</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            Deployed cloud decoy sensors running Cowrie, Dionaea, and Suricata. Captured 50,000+ real-world attack metrics and synthesized telemetry into ELK dashboards.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">HONEYPOT</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">SURICATA</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">ELK_STACK</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">DOCKER</span>
+                        </div>
+
+                        <button onclick="openModal('T-Pot Decoy Network Analysis', 'Detailed analysis of global automated SSH brute-force traffic logs captured.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LAB CARD 5 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="red">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_05 // BLUE
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: HIGH</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">Under Construction</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            To be filled out as I progress.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                        </div>
+
+                        <button onclick="openModal('C2 Infrastructure Guide', 'Hardening redirectors and setting up domain fronting for red team operations.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+                <!-- LAB CARD 6 -->
+                <article class="lab-card border-4 border-term-black bg-term-bg p-5 retro-box flex flex-col justify-between" data-category="cloud">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-black text-term-bg text-xs font-bold">
+                                LAB_06 // BLUE
+                            </span>
+                            <span class="text-xs font-bold border-b border-term-black">DIFFICULTY: MED</span>
+                        </div>
+                        <h3 class="font-crt text-2xl font-bold mb-2">Under Construction</h3>
+                        <p class="text-xs font-semibold leading-relaxed mb-4">
+                            To be filled out as I progress..
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                            <span class="px-2 py-0.5 border border-term-black bg-term-bg/80">COMMING SOON</span>
+                        </div>
+
+                        <button onclick="openModal('Kubernetes Security Audit', 'Falco policy YAML configurations and container escape benchmark tests.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-black bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black transition border">
+                            VIEW_LAB_DOCUMENTATION ►
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section id="vault" class="space-y-6 pt-4">
+            <div class="border-b-4 border-term-black pb-3">
+                <h2 class="font-crt text-4xl font-extrabold uppercase tracking-tight flex items-center gap-2">
+                    <span class="text-2xl">►</span> TACTICAL_COMMAND_VAULT
+                </h2>
+                <p class="text-xs font-bold uppercase tracking-wider opacity-90">Quick reference incident response and threat hunting terminal snippets</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Code Snippet Box 1 -->
+                <div class="border-4 border-term-black bg-term-black text-term-bg p-4 retro-box space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-term-bg border-b border-term-bg/40 pb-2">
+                        <span>[SNIPPET_01] Linux Process Privilege Audit</span>
+                        <button onclick="copySnippet('snippet1', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-glow font-bold text-[10px]">
+                            COPY
+                        </button>
+                    </div>
+                    <pre class="font-mono text-xs text-term-bg overflow-x-auto p-2 bg-term-bg/10 border border-term-bg/30"><code id="snippet1"># Find all SUID binaries and list full file permissions
+find / -perm -4000 -type f -exec ls -la {} \; 2>/dev/null
+
+# Monitor active connections with associated binary PID
+ss -tulpn | grep ESTAB</code></pre>
+                </div>
+
+                <!-- Code Snippet Box 2 -->
+                <div class="border-4 border-term-black bg-term-black text-term-bg p-4 retro-box space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-term-bg border-b border-term-bg/40 pb-2">
+                        <span>[SNIPPET_02] Windows Sysmon Suspicious PowerShell</span>
+                        <button onclick="copySnippet('snippet2', this)" class="px-2 py-0.5 bg-term-bg text-term-black hover:bg-term-glow font-bold text-[10px]">
+                            COPY
+                        </button>
+                    </div>
+                    <pre class="font-mono text-xs text-term-bg overflow-x-auto p-2 bg-term-bg/10 border border-term-bg/30"><code id="snippet2"># Splunk SPL to detect Encoded PowerShell execution
+index=win_logs EventCode=4688 OR EventCode=1 
+| eval cmd=lower(CommandLine)
+| search cmd="*-enc*" OR cmd="*-encodedcommand*"
+| table _time, Hostname, User, CommandLine</code></pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DIALOG -->
+    <div id="labModal" class="fixed inset-0 z-50 bg-term-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="border-4 border-term-black bg-term-bg text-term-black max-w-xl w-full p-6 retro-box relative space-y-4">
+            <div class="flex justify-between items-center border-b-2 border-term-black pb-2">
+                <h3 id="modalTitle" class="font-crt text-3xl font-extrabold uppercase">LAB_DETAILS</h3>
+                <button onclick="closeModal()" class="px-2 py-1 bg-term-black text-term-bg font-bold text-xs hover:bg-term-bg hover:text-term-black border border-term-black">
+                    [X] CLOSE
+                </button>
+            </div>
+            <p id="modalBody" class="text-sm font-semibold leading-relaxed">
+                Documentation details...
+            </p>
+            <div class="pt-4 border-t-2 border-term-black flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 border-2 border-term-black bg-term-bg hover:bg-term-black hover:text-term-bg font-bold text-xs">
+                    RETURN
+                </button>
+                <a id="modalGithubLink" href="#" target="_blank" class="px-4 py-2 border-2 border-term-black bg-term-black text-term-bg hover:bg-term-bg hover:text-term-black font-bold text-xs inline-block">
+                    VIEW_GITHUB_REPO ►
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-16 border-t-4 border-term-black bg-term-bg py-6 text-xs font-bold">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                © 2026 WAYNE_DUMAIS // RETRO_CONSOLE_PORTFOLIO
+            </div>
+            <div class="flex space-x-4">
+                <a href="https://github.com/wdumais-cloud/wdumais-cloud" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">GITHUB</a>
+                <a href="https://www.linkedin.com/in/wayne-dumais" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">LINKEDIN</a>
+                <a href="https://www.skool.com/mydfir" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">THEFORGE</a>
+                <a href="https://www.skool.com/signup?ref=9f708ec2eaf84771b394724193483962" class="border-b border-term-black hover:bg-term-black hover:text-term-bg px-1">AFFILIATE</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Interactive Terminal Mechanics
+        const commandMap = {
+            'whoami': 'OPERATOR: Wayne Dumais | SEC_ROLE: Security Operations Centre Analyst',
+            'sysinfo': 'OS: Retro-Cyber-OS v2.04 | ARCH: x86_64 | UPTIME: 99.98% | STATUS: NOMINAL',
+            'certifications': 'CERTIFICATIONS: CompTIA A+, CompTIA NETWORK+, CompTIA SECURITY+, CompTIA CYSA+',
+            'certs': 'CERTIFICATIONS: CompTIA A+, CompTIA NETWORK+, CompTIA SECURITY+, CompTIA CYSA+'
+        };
+
+        function runCommand(cmd) {
+            const outputContainer = document.getElementById('terminalOutput');
+            const promptInput = document.getElementById('terminalPromptInput');
+            
+            promptInput.innerText = cmd;
+
+            setTimeout(() => {
+                const newEntry = document.createElement('div');
+                newEntry.className = "space-y-1 mb-2";
+
+                if (cmd === 'clear') {
+                    outputContainer.innerHTML = '';
+                    promptInput.innerText = '';
+                    return;
+                }
+
+                const response = commandMap[cmd] || `Command not recognized: '${cmd}'. Available: whoami, sysinfo, certs, clear`;
+                
+                newEntry.innerHTML = `
+                    <div><span class="text-term-glow">root@cyber-node:~#</span> ${cmd}</div>
+                    <div class="text-term-bg opacity-90 pl-3 font-semibold">► ${response}</div>
+                `;
+
+                outputContainer.appendChild(newEntry);
+                promptInput.innerText = '';
+
+                // Scroll terminal to bottom
+                const termBody = document.getElementById('terminalBody');
+                termBody.scrollTop = termBody.scrollHeight;
+            }, 180);
+        }
+
+        // 2. Filter Category Handler
+        function filterLabs(category) {
+            const cards = document.querySelectorAll('.lab-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                if(btn.getAttribute('data-filter') === category) {
+                    btn.classList.add('bg-term-black', 'text-term-bg');
+                    btn.classList.remove('bg-term-bg', 'text-term-black');
+                } else {
+                    btn.classList.remove('bg-term-black', 'text-term-bg');
+                    btn.classList.add('bg-term-bg', 'text-term-black');
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 3. Modal Dialog Handlers
+        function openModal(title, description, githubUrl) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = description;
+            document.getElementById('modalGithubLink').href = githubUrl;
+            document.getElementById('labModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('labModal').classList.add('hidden');
+        }
+
+        // 4. Copy Code Snippet Handler
+        function copySnippet(elementId, btnElement) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            // Clipboard fallback strategy
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "COPIED!";
+            btnElement.classList.add('bg-term-glow');
+
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.classList.remove('bg-term-glow');
+            }, 1500);
