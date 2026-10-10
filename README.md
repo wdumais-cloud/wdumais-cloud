@@ -1,5 +1,14 @@
+
+
+# 🚀 Cyber Security Portfolio & Interactive Lab Hub
+
+> Welcome! Explore my interactive terminal console, threat detection labs, and command vault:
+
+👉 **[Launch Interactive Green Console Portfolio →](https://wdumais-cloud.github.io/wdumais-cloud/))**
+
+
 # Hello, I'm Wayne
-<a href="www.linkedin.com/in/wayne-dumais"><img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+<a href="https://www.linkedin.com/in/wayne-dumais"><img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
 
 
 I am a recent CySA+ graduate with an interest in Information Security and a dedication to solving complex problems and staying curious. With a background in Human Services and armed with CompTIA A+, Network+, Security+ and CySA+ qualifications, I bridge the gap between technical security and human risk. Actively seeking a GRC or Security Operations Centre role where I can leverage my workplace maturity, communication skills, and rapid technical aptitude to protect and support a values-driven team.
