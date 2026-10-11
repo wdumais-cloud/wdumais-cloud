@@ -4,7 +4,7 @@
 
 > Welcome! Explore my interactive terminal console, threat detection labs, and command vault:
 
-👉 **[Launch Interactive Green Console Portfolio →](https://wdumais-cloud.github.io/wdumais-cloud/))**
+👉 **[Launch Interactive Console Portfolio →](https://wdumais-cloud.github.io/wdumais-cloud/))**
 
 
 # Hello, I'm Wayne
