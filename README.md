@@ -1,6 +1,6 @@
 
 
-# 🚀 Cyber Security Portfolio & Interactive Lab Hub
+# Cyber Security Portfolio & Interactive Lab Hub
 
 > Welcome! Explore my interactive terminal console, threat detection labs, and command vault:
 
