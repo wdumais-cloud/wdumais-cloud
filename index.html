@@ -1,34 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS_ADMIN // Cyber Security Lab Console</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter for UI body & Fira Code / JetBrains Mono for monospace code aesthetics -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         term: {
-                            bg: '#0b0f17',       /* Deep slate-charcoal background */
-                            bgDark: '#070a0f',   /* Darker slate for depth */
-                            bgDeep: '#040609',   /* Deepest background tone */
-                            black: '#1e293b',    /* Crisp slate border/accent tone */
-                            textMain: '#e2e8f0', /* High-contrast soft white/silver */
-                            cardBg: '#111827',   /* Slightly lighter slate for containers */
-                            border: '#334155',   /* Clean structural borders */
-                            glow: '#34d399',     /* Modern emerald glow */
-                            dim: '#059669',      /* Dim emerald accent */
-                            accent: '#34d399'    /* Vibrant mint/emerald highlight */
+                            bg: '#080d1a',        /* Deep midnight slate background */
+                            bgDark: '#040711',    /* Deeper dark slate for contrast */
+                            cardBg: '#0f172a',    /* Glassy card background tone */
+                            border: '#1e293b',    /* Subtle border definition */
+                            borderGlow: '#334155',/* Elevated border highlight */
+                            textMain: '#f8fafc',  /* Crisp high-contrast main text */
+                            textMuted: '#94a3b8', /* Soft muted gray-blue text */
+                            accent: '#38bdf8',    /* Neon Cyan accent */
+                            accentGlow: '#00f2fe',/* High intensity neon highlight */
+                            accentEmerald: '#10b981' /* Emerald success highlight */
                         }
                     },
                     fontFamily: {
-                        mono: ['"Fira Code"', 'monospace'],
-                        crt: ['"VT323"', 'monospace']
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace']
+                    },
+                    boxShadow: {
+                        'glow-sm': '0 0 15px rgba(56, 189, 248, 0.15)',
+                        'glow-md': '0 0 25px rgba(56, 189, 248, 0.25)',
+                        'glow-emerald': '0 0 15px rgba(16, 185, 129, 0.2)'
                     }
                 }
             }
@@ -36,32 +44,13 @@
     </script>
     <style>
         body {
-            background-color: #0b0f17;
-            color: #e2e8f0;
-            font-family: 'Fira Code', monospace;
-        }
-
-        /* Scanline Overlay Effect (Subtle & clean) */
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 50;
-            opacity: 0.6;
-        }
-
-        /* Vignette CRT Screen Curve Feel */
-        .crt-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.6);
-            z-index: 51;
+            background-color: #080d1a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
         /* Cursor blinking animation */
@@ -73,72 +62,65 @@
             animation: blink 1s infinite;
         }
 
-        /* Tactical Retro Card Shadows with Modern Border Contrast */
-        .retro-box {
-            background-color: #111827;
-            border-color: #334155;
-            box-shadow: 5px 5px 0px #020617;
-            transition: all 0.2s ease-in-out;
+        /* Glassmorphism Card Effect */
+        .sleek-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 16, 31, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .retro-box:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px #020617;
-            border-color: #34d399;
+        .sleek-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+            transform: translateY(-2px);
         }
 
-        .retro-button {
-            box-shadow: 3px 3px 0px #020617;
-            transition: all 0.15s ease;
+        .sleek-button {
+            transition: all 0.2s ease;
+        }
+        .sleek-button:hover {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
-        .retro-button:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 5px 5px 0px #020617;
-        }
-
-        .retro-button:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #020617;
-        }
-
-        /* Custom scrollbars */
+        /* Custom Scrollbars */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a;
-            border: 1px solid #334155;
+            background: #040711;
         }
         ::-webkit-scrollbar-thumb {
-            background: #34d399;
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col relative pb-12 selection:bg-term-accent selection:text-term-bgDark">
 
-    <div id="scanlineLayer" class="scanlines"></div>
-    <div id="crtOverlayLayer" class="crt-overlay"></div>
-
-    <header class="sticky top-0 z-40 bg-term-card border-b-4 border-term-black px-4 py-3 shadow-lg">
+    <!-- TOP HEADER / NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-term-bg/80 backdrop-blur-md border-b border-term-border/80 px-4 py-3 shadow-lg">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <!-- Brand Logo / Title -->
             <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 bg-term-accent animate-pulse"></div>
-                <a href="#" class="font-crt text-3xl font-bold tracking-wider text-term-textMain hover:text-term-accent transition">
-                    CYBER_LABS://v2.04
+                <div class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-term-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-term-accent"></span>
+                </div>
+                <a href="#" class="font-mono text-xl md:text-2xl font-bold tracking-wider text-term-textMain hover:text-term-accent transition flex items-center gap-2">
+                    <span class="text-term-accent">CYBER_LABS</span><span class="text-xs px-2 py-0.5 rounded bg-term-accent/10 text-term-accent border border-term-accent/30">v2.04</span>
                 </a>
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex items-center space-x-2 text-sm font-bold">
-                <a href="#about" class="px-3 py-1 border-2 border-term-border bg-term-bg hover:bg-term-accent hover:text-term-bgDark transition">/SYSTEM</a>
-                <a href="#labs" class="px-3 py-1 border-2 border-term-accent bg-term-accent text-term-bgDark transition">/LABS</a>
-                <a href="#vault" class="px-3 py-1 border-2 border-term-border bg-term-bg hover:bg-term-accent hover:text-term-bgDark transition">/PLAYBOOKS</a>
-                <button onclick="toggleCRT()" id="crtToggleBtn" class="px-3 py-1 border-2 border-term-border bg-term-bg hover:bg-term-accent hover:text-term-bgDark text-xs flex items-center gap-1">
-                    [CRT: ON]
-                </button>
+            <nav class="flex items-center space-x-2 text-xs md:text-sm font-mono font-bold">
+                <a href="#about" class="px-3 py-1.5 rounded-lg border border-term-border bg-term-bgDark/60 text-slate-300 hover:border-term-accent hover:text-term-accent transition">/SYSTEM</a>
+                <a href="#labs" class="px-3 py-1.5 rounded-lg border border-term-accent/50 bg-term-accent/10 text-term-accent hover:bg-term-accent/20 transition">/LABS</a>
+                <a href="#vault" class="px-3 py-1.5 rounded-lg border border-term-border bg-term-bgDark/60 text-slate-300 hover:border-term-accent hover:text-term-accent transition">/PLAYBOOKS</a>
             </nav>
         </div>
     </header>
@@ -146,110 +128,118 @@
     <!-- MAIN CONTENT CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 mt-8 flex-grow space-y-12 w-full">
 
+        <!-- ABOUT / HERO SECTION -->
         <section id="about" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
             <!-- Hero Left Intro Box -->
-            <div class="lg:col-span-5 border-4 border-term-border bg-term-card p-6 retro-box flex flex-col justify-between">
+            <div class="lg:col-span-5 rounded-xl sleek-card p-6 md:p-8 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-term-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+                
                 <div>
-                    <div class="inline-block px-2 py-0.5 bg-term-accent text-term-bgDark text-xs font-bold mb-3 uppercase">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-term-accent/10 border border-term-accent/30 text-term-accent text-xs font-mono font-bold mb-4">
+                        <span class="w-2 h-2 rounded-full bg-term-accent"></span>
                         SOC_ANALYST
                     </div>
-                    <h1 class="font-crt text-5xl font-extrabold leading-none mb-4 text-term-textMain">
+                    <h1 class="font-mono text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">
                         WAYNE_DUMAIS
                     </h1>
-                    <p class="text-sm leading-relaxed mb-4 font-semibold text-slate-300">
+                    <p class="text-sm leading-relaxed mb-6 text-term-textMuted font-normal">
                         With a background in Human Services, I bridge the gap between technical security and human risk. Actively seeking a GRC or Security Operations Centre role where I can leverage my workplace maturity, communication skills, and rapid technical aptitude to protect and support a values-driven team.
                     </p>
                 </div>
 
-                <div class="space-y-2 pt-4 border-t-2 border-term-border">
-                    <div class="flex justify-between text-xs font-bold">
-                        <span class="text-slate-400">CLEARANCE_LEVEL:</span>
-                        <span class="text-term-accent">TOP_SECRET // L5</span>
+                <div class="space-y-3 pt-6 border-t border-term-border/80 font-mono text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">CURRENT_STATE:</span>
+                        <span class="text-term-accent font-semibold px-2 py-0.5 rounded bg-term-accent/10 border border-term-accent/20">UPGRADING // L5</span>
                     </div>
-                    <div class="flex justify-between text-xs font-bold">
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-400">STATUS:</span>
-                        <span class="bg-term-accent text-term-bgDark px-1">ACTIVE_MONITORING</span>
+                        <span class="bg-term-accentEmerald/20 text-term-accentEmerald border border-term-accentEmerald/30 px-2 py-0.5 rounded font-semibold">ACTIVE_MONITORING</span>
                     </div>
-                    <div class="flex justify-between text-xs font-bold">
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-400">TARGET_SCOPE:</span>
-                        <span class="text-slate-200">CLOUD / AD / SIEM</span>
+                        <span class="text-slate-200 font-medium">CLOUD / SPLUNK / SIEM</span>
                     </div>
                 </div>
             </div>
 
             <!-- Hero Right Live Interactive Terminal -->
-            <div class="lg:col-span-7 border-4 border-term-border bg-term-card text-term-textMain rounded-none retro-box flex flex-col">
+            <div class="lg:col-span-7 rounded-xl sleek-card text-term-textMain flex flex-col overflow-hidden border border-term-border">
                 <!-- Terminal Title Bar -->
-                <div class="bg-term-bgDark text-term-accent px-4 py-1.5 font-bold border-b-2 border-term-border flex justify-between items-center text-xs">
-                    <span>SYS_CONSOLE_TTY1 [BASH]</span>
-                    <div class="flex space-x-1">
-                        <span class="w-3 h-3 border border-term-border inline-block bg-term-card"></span>
-                        <span class="w-3 h-3 border border-term-border inline-block bg-term-card"></span>
-                        <span class="w-3 h-3 border border-term-border inline-block bg-term-accent"></span>
+                <div class="bg-term-bgDark/90 text-term-accent px-4 py-3 border-b border-term-border flex justify-between items-center font-mono text-xs">
+                    <div class="flex items-center gap-2">
+                        <div class="flex space-x-1.5">
+                            <span class="w-3 h-3 rounded-full inline-block bg-red-500/80 border border-red-600"></span>
+                            <span class="w-3 h-3 rounded-full inline-block bg-yellow-500/80 border border-yellow-600"></span>
+                            <span class="w-3 h-3 rounded-full inline-block bg-emerald-500/80 border border-emerald-600"></span>
+                        </div>
+                        <span class="ml-2 text-slate-400">SYS_CONSOLE_TTY1 [BASH]</span>
                     </div>
+                    <span class="text-[10px] text-slate-500 uppercase tracking-widest">Interactive Terminal</span>
                 </div>
 
                 <!-- Terminal Content Box -->
-                <div class="p-4 font-mono text-xs md:text-sm space-y-3 flex-grow overflow-y-auto max-h-[280px]" id="terminalBody">
+                <div class="p-4 md:p-6 font-mono text-xs md:text-sm space-y-3 flex-grow overflow-y-auto max-h-[300px] bg-term-bgDark/50" id="terminalBody">
                     <div>
                         <span class="text-term-accent font-bold">root@cyber-node:~#</span> <span class="text-slate-200">cat welcome.txt</span>
-                        <p class="mt-1 text-slate-300 font-medium">
+                        <p class="mt-2 text-slate-300 leading-relaxed bg-term-card/60 p-3 rounded border border-term-border/50">
                             Welcome to CyberLabs v2.04. All systems operational. Click commands below to execute diagnostic queries.
                         </p>
                     </div>
 
-                    <div id="terminalOutput"></div>
+                    <div id="terminalOutput" class="space-y-3"></div>
 
-                    <div class="flex items-center text-term-accent font-bold">
+                    <div class="flex items-center text-term-accent font-bold pt-1">
                         <span>root@cyber-node:~#&nbsp;</span>
                         <span id="terminalPromptInput" class="text-slate-200"></span>
-                        <span class="w-2.5 h-4 bg-term-accent inline-block ml-1 cursor-blink"></span>
+                        <span class="w-2 h-4 bg-term-accent inline-block ml-1 cursor-blink rounded-sm"></span>
                     </div>
                 </div>
 
                 <!-- Quick Command Action Buttons -->
-                <div class="bg-slate-900/50 p-2 border-t-2 border-term-border flex flex-wrap gap-2 text-xs">
-                    <button onclick="runCommand('whoami')" class="px-2 py-1 bg-term-card text-term-accent border border-term-border hover:bg-term-accent hover:text-term-bgDark font-bold">
-                        $ whoami
+                <div class="bg-term-bgDark/90 p-3 border-t border-term-border flex flex-wrap gap-2 text-xs font-mono">
+                    <button onclick="runCommand('whoami')" class="px-3 py-1.5 rounded-md bg-term-card text-term-accent border border-term-accent/30 hover:bg-term-accent hover:text-term-bgDark font-bold sleek-button flex items-center gap-1">
+                        <span class="text-slate-500">$</span> whoami
                     </button>
-                    <button onclick="runCommand('sysinfo')" class="px-2 py-1 bg-term-card text-term-accent border border-term-border hover:bg-term-accent hover:text-term-bgDark font-bold">
-                        $ sysinfo
+                    <button onclick="runCommand('sysinfo')" class="px-3 py-1.5 rounded-md bg-term-card text-term-accent border border-term-accent/30 hover:bg-term-accent hover:text-term-bgDark font-bold sleek-button flex items-center gap-1">
+                        <span class="text-slate-500">$</span> sysinfo
                     </button>
-                    <button onclick="runCommand('certifications')" class="px-2 py-1 bg-term-card text-term-accent border border-term-border hover:bg-term-accent hover:text-term-bgDark font-bold">
-                        $ certs
+                    <button onclick="runCommand('certifications')" class="px-3 py-1.5 rounded-md bg-term-card text-term-accent border border-term-accent/30 hover:bg-term-accent hover:text-term-bgDark font-bold sleek-button flex items-center gap-1">
+                        <span class="text-slate-500">$</span> certs
                     </button>
-                    <button onclick="runCommand('clear')" class="px-2 py-1 bg-term-accent text-term-bgDark border border-term-border hover:bg-slate-800 hover:text-slate-200 font-bold ml-auto">
-                        $ clear
+                    <button onclick="runCommand('clear')" class="px-3 py-1.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white font-bold ml-auto sleek-button">
+                        clear
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="labs" class="space-y-6">
+        <!-- LABS SECTION -->
+        <section id="labs" class="space-y-6 pt-4">
             
             <!-- Section Title & Filter Controls -->
-            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-4 border-term-border pb-4 gap-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-term-border pb-4 gap-4">
                 <div>
-                    <h2 class="font-crt text-4xl font-extrabold uppercase tracking-tight flex items-center gap-2 text-term-textMain">
-                        <span class="text-2xl text-term-accent">►</span> FEATURED_LAB_MODULES
+                    <h2 class="font-mono text-2xl md:text-3xl font-extrabold uppercase tracking-tight flex items-center gap-3 text-white">
+                        <span class="text-term-accent">►</span> FEATURED_LAB_MODULES
                     </h2>
-                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Hands-on threat investigations, reports & enterprise SIEM architecture</p>
+                    <p class="text-xs font-mono uppercase tracking-wider text-term-textMuted mt-1">Hands-on threat investigations, reports & enterprise SIEM architecture</p>
                 </div>
 
                 <!-- Category Filter Buttons -->
-                <div class="flex flex-wrap gap-2 text-xs font-bold">
-                    <button onclick="filterLabs('all')" class="filter-btn active px-3 py-1 border-2 border-term-border bg-term-accent text-term-bgDark retro-button" data-filter="all">
+                <div class="flex flex-wrap gap-2 text-xs font-mono font-semibold">
+                    <button onclick="filterLabs('all')" class="filter-btn active px-3.5 py-1.5 rounded-lg border border-term-accent bg-term-accent text-term-bgDark font-bold shadow-glow-sm" data-filter="all">
                         ALL_LABS [6]
                     </button>
-                    <button onclick="filterLabs('blue')" class="filter-btn px-3 py-1 border-2 border-term-border bg-term-card text-slate-300 hover:bg-term-accent hover:text-term-bgDark retro-button" data-filter="blue">
-                        DEFENSE // SIEM
+                    <button onclick="filterLabs('blue')" class="filter-btn px-3.5 py-1.5 rounded-lg border border-term-border bg-term-card/80 text-slate-300 hover:border-term-accent hover:text-term-accent transition" data-filter="blue">
+                        PHISHING // EMAIL
                     </button>
-                    <button onclick="filterLabs('red')" class="filter-btn px-3 py-1 border-2 border-term-border bg-term-card text-slate-300 hover:bg-term-accent hover:text-term-bgDark retro-button" data-filter="red">
-                        IDENTITY // MANAGEMENT
+                    <button onclick="filterLabs('red')" class="filter-btn px-3.5 py-1.5 rounded-lg border border-term-border bg-term-card/80 text-slate-300 hover:border-term-accent hover:text-term-accent transition" data-filter="red">
+                        DEFENCE // SIEM
                     </button>
-                    <button onclick="filterLabs('cloud')" class="filter-btn px-3 py-1 border-2 border-term-border bg-term-card text-slate-300 hover:bg-term-accent hover:text-term-bgDark retro-button" data-filter="cloud">
-                        CLOUD_SEC
+                    <button onclick="filterLabs('cloud')" class="filter-btn px-3.5 py-1.5 rounded-lg border border-term-border bg-term-card/80 text-slate-300 hover:border-term-accent hover:text-term-accent transition" data-filter="cloud">
+                        VULNERABILITY // MANAGMENT
                     </button>
                 </div>
             </div>
@@ -258,179 +248,179 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="labsGrid">
                 
                 <!-- LAB CARD 1 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="blue">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="blue">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
                                 LAB_01 // BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: MED</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: MED</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">Phishing Email Investigation & Report</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Phishing Email Investigation & Report</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
                             Investigated Email Headers, Authentication Results, File Signatures, Conducted OSINT, Examined Metadata & Report Writing.
                         </p>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
                         <!-- Tech Badges -->
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">NOTEPAD++</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">HXD</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">EXIFTOOL</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">CYBERCHEF</span>
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">NOTEPAD++</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">HXD</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">EXIFTOOL</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">CYBERCHEF</span>
                         </div>
 
                         <!-- Action Link Button -->
                         <button onclick="openModal('Phishing Email Investigation & Report', 
             'Detailed breakdown of email header authentication (SPF/DKIM/DMARC), HxD file signature inspection, ExifTool metadata analysis, and OSINT investigation workflow.', 
-            'https://github.com/wdumais-cloud/phishing-analysis-lab')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+            'https://github.com/wdumais-cloud/phishing-analysis-lab')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
 
                 <!-- LAB CARD 2 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="red">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="red">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
                                 LAB_02 // BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: MED</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: MED</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">Active Directory Domain Lab</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
-                            Simulated full AD environment with a range of priveleges through group policy objects and best practice implemented to secure the environment.
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Splunk Enterprise Lab</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
+                            Configuration and Installation. Universal Forwarder Configuration, Splunk Queries, Dashboards, Alerts and Reports. MITRE ATT&CK Mapping.
                         </p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">WINDOWS_SERVER</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">WINDOWS11</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">ACTIVE DIRECTORY</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">TBC</span>
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">SPLUNK</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">WINDOWS</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">LINUX_SERVER</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">INVESTIGATIONS</span>
                         </div>
 
-                        <button onclick="openModal('Active Directory Attack Lab', 'Step-by-step pentest writeup detailing Kerberoasting defense and privilege escalation routes.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+                        <button onclick="openModal('Splunk Enterprise Lab', 'Develop an investigative mindset by querying data using Splunk queries, creating Dashboards, creating Alerts and Reports in Splunk.', 'https://github.com/wdumais-cloud/Splunk_Enterprise')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
 
                 <!-- LAB CARD 3 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="cloud">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="cloud">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
-                                LAB_03 // CLOUD
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
+                                LAB_03 // RED/BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: HIGH</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: MED</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">AWS CloudTrail & GuardDuty Threat Detection</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
-                            Coming Soon.
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Vulnerability Scanning and Management</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
+                            Using Kali Linux and OpenVAS to discover vulnerabilities on a Metasploitable 2 machine. Coming Soon.
                         </p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">TBC</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">TBC</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">TBC</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">TBC</span>
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">TBC</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">TBC</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">TBC</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">TBC</span>
                         </div>
 
-                        <button onclick="openModal('AWS Cloud Security Automation', 'Terraform scripts and Python Lambda source code for auto-remediation playbooks.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+                        <button onclick="openModal('Greenbone Vulnerability Management', 'Red team discovery and blue team detection techniques.', 'https://github.com')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
 
                 <!-- LAB CARD 4 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="blue">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="blue">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
                                 LAB_04 // BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: MED</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: MED</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">T-Pot Multi-Honeypot Decoy Network (Wishlist)</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
-                            Deployed cloud decoy sensors running Cowrie, Dionaea, and Suricata. Captured 50,000+ real-world attack metrics and synthesized telemetry into ELK dashboards.
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Under Construction</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
+                            To be filled out as I progress.
                         </p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">HONEYPOT</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">SURICATA</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">ELK_STACK</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">DOCKER</span>
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
                         </div>
 
-                        <button onclick="openModal('T-Pot Decoy Network Analysis', 'Detailed analysis of global automated SSH brute-force traffic logs captured.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+                        <button onclick="openModal('Under Construction', 'Coming Soon', 'https://github.com')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
 
                 <!-- LAB CARD 5 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="red">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="red">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
                                 LAB_05 // BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: HIGH</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: HIGH</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">Under Construction</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Under Construction</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
                             To be filled out as I progress.
                         </p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
                         </div>
 
-                        <button onclick="openModal('C2 Infrastructure Guide', 'Hardening redirectors and setting up domain fronting for red team operations.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+                        <button onclick="openModal('Under Construction', 'Coming Soon.', 'https://github.com')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
 
                 <!-- LAB CARD 6 -->
-                <article class="lab-card border-4 border-term-border bg-term-card p-5 retro-box flex flex-col justify-between" data-category="cloud">
+                <article class="lab-card rounded-xl sleek-card p-6 flex flex-col justify-between" data-category="cloud">
                     <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="px-2 py-0.5 border border-term-border bg-term-bgDark text-term-accent text-xs font-bold">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent text-[11px] font-mono font-bold">
                                 LAB_06 // BLUE
                             </span>
-                            <span class="text-xs font-bold border-b border-term-border text-slate-400">DIFFICULTY: MED</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-400">DIFFICULTY: MED</span>
                         </div>
-                        <h3 class="font-crt text-2xl font-bold mb-2 text-term-textMain">Under Construction</h3>
-                        <p class="text-xs font-semibold leading-relaxed mb-4 text-slate-300">
+                        <h3 class="font-mono text-xl font-bold mb-3 text-white">Under Construction</h3>
+                        <p class="text-xs font-normal leading-relaxed mb-6 text-term-textMuted">
                             To be filled out as I progress..
                         </p>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex flex-wrap gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
-                            <span class="px-2 py-0.5 border border-term-border bg-slate-900 text-slate-300">COMING SOON</span>
+                    <div class="space-y-4 pt-4 border-t border-term-border/50">
+                        <div class="flex flex-wrap gap-1.5 text-[10px] font-mono font-semibold">
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
+                            <span class="px-2 py-0.5 rounded border border-term-border bg-term-bgDark text-slate-300">COMING SOON</span>
                         </div>
 
-                        <button onclick="openModal('Kubernetes Security Audit', 'Falco policy YAML configurations and container escape benchmark tests.', 'https://github.com')" class="w-full text-center py-2 border-2 border-term-border bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 transition">
-                            VIEW_LAB_DOCUMENTATION ►
+                        <button onclick="openModal('Under Construction', 'Coming Soon.', 'https://github.com')" class="w-full text-center py-2.5 rounded-lg border border-term-accent bg-term-accent/10 text-term-accent font-mono font-bold text-xs hover:bg-term-accent hover:text-term-bgDark sleek-button flex items-center justify-center gap-2">
+                            <span>VIEW_LAB_DOCUMENTATION</span> ►
                         </button>
                     </div>
                 </article>
@@ -438,24 +428,25 @@
             </div>
         </section>
 
+        <!-- COMMAND VAULT SECTION -->
         <section id="vault" class="space-y-6 pt-4">
-            <div class="border-b-4 border-term-border pb-3">
-                <h2 class="font-crt text-4xl font-extrabold uppercase tracking-tight flex items-center gap-2 text-term-textMain">
-                    <span class="text-2xl text-term-accent">►</span> TACTICAL_COMMAND_VAULT
+            <div class="border-b border-term-border pb-3">
+                <h2 class="font-mono text-2xl md:text-3xl font-extrabold uppercase tracking-tight flex items-center gap-3 text-white">
+                    <span class="text-term-accent">►</span> TACTICAL_COMMAND_VAULT
                 </h2>
-                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Quick reference incident response and threat hunting terminal snippets</p>
+                <p class="text-xs font-mono uppercase tracking-wider text-term-textMuted mt-1">Quick reference incident response and threat hunting terminal snippets</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Code Snippet Box 1 -->
-                <div class="border-4 border-term-border bg-term-card text-term-textMain p-4 retro-box space-y-3">
-                    <div class="flex justify-between items-center text-xs font-bold text-slate-300 border-b border-term-border pb-2">
-                        <span>[SNIPPET_01] Linux Process Privilege Audit</span>
-                        <button onclick="copySnippet('snippet1', this)" class="px-2 py-0.5 bg-term-accent text-term-bgDark hover:bg-slate-200 font-bold text-[10px]">
+                <div class="rounded-xl sleek-card p-5 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-mono font-bold text-slate-300 border-b border-term-border/80 pb-2">
+                        <span class="text-term-accent">[SNIPPET_01] Linux Process Privilege Audit</span>
+                        <button onclick="copySnippet('snippet1', this)" class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent hover:bg-term-accent hover:text-term-bgDark font-bold text-[11px] sleek-button">
                             COPY
                         </button>
                     </div>
-                    <pre class="font-mono text-xs text-slate-200 overflow-x-auto p-2 bg-slate-900 border border-term-border"><code id="snippet1"># Find all SUID binaries and list full file permissions
+                    <pre class="font-mono text-xs text-slate-200 overflow-x-auto p-3 rounded-lg bg-term-bgDark/80 border border-term-border"><code id="snippet1"># Find all SUID binaries and list full file permissions
 find / -perm -4000 -type f -exec ls -la {} \; 2>/dev/null
 
 # Monitor active connections with associated binary PID
@@ -463,18 +454,18 @@ ss -tulpn | grep ESTAB</code></pre>
                 </div>
 
                 <!-- Code Snippet Box 2 -->
-                <div class="border-4 border-term-border bg-term-card text-term-textMain p-4 retro-box space-y-3">
-                    <div class="flex justify-between items-center text-xs font-bold text-slate-300 border-b border-term-border pb-2">
-                        <span>[SNIPPET_02] Windows Sysmon Suspicious PowerShell</span>
-                        <button onclick="copySnippet('snippet2', this)" class="px-2 py-0.5 bg-term-accent text-term-bgDark hover:bg-slate-200 font-bold text-[10px]">
+                <div class="rounded-xl sleek-card p-5 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-mono font-bold text-slate-300 border-b border-term-border/80 pb-2">
+                        <span class="text-term-accent">[SNIPPET_02] Windows Sysmon Suspicious PowerShell</span>
+                        <button onclick="copySnippet('snippet2', this)" class="px-2.5 py-1 rounded bg-term-accent/10 border border-term-accent/30 text-term-accent hover:bg-term-accent hover:text-term-bgDark font-bold text-[11px] sleek-button">
                             COPY
                         </button>
                     </div>
-                    <pre class="font-mono text-xs text-slate-200 overflow-x-auto p-2 bg-slate-900 border border-term-border"><code id="snippet2"># Splunk SPL to detect Encoded PowerShell execution
+                    <pre class="font-mono text-xs text-slate-200 overflow-x-auto p-3 rounded-lg bg-term-bgDark/80 border border-term-border"><code id="snippet2"># Splunk SPL to detect Encoded PowerShell execution
 index=win_logs EventCode=4688 OR EventCode=1 
 | eval cmd=lower(CommandLine)
 | search cmd="*-enc*" OR cmd="*-encodedcommand*"
-| table _time, Hostname, User, CommandLine</code></pre>
+| table _time, Hostname, user, CommandLine</code></pre>
                 </div>
             </div>
         </section>
@@ -482,38 +473,39 @@ index=win_logs EventCode=4688 OR EventCode=1
     </main>
 
     <!-- MODAL DIALOG -->
-    <div id="labModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="border-4 border-term-border bg-term-card text-term-textMain max-w-xl w-full p-6 retro-box relative space-y-4">
-            <div class="flex justify-between items-center border-b-2 border-term-border pb-2">
-                <h3 id="modalTitle" class="font-crt text-3xl font-extrabold uppercase text-term-textMain">LAB_DETAILS</h3>
-                <button onclick="closeModal()" class="px-2 py-1 bg-term-accent text-term-bgDark font-bold text-xs hover:bg-slate-200 border border-term-border">
+    <div id="labModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="rounded-2xl sleek-card text-term-textMain max-w-xl w-full p-6 md:p-8 relative space-y-5 border border-term-accent/30 shadow-glow-md">
+            <div class="flex justify-between items-center border-b border-term-border pb-3">
+                <h3 id="modalTitle" class="font-mono text-2xl font-extrabold uppercase text-white">LAB_DETAILS</h3>
+                <button onclick="closeModal()" class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-xs border border-slate-700">
                     [X] CLOSE
                 </button>
             </div>
-            <p id="modalBody" class="text-sm font-semibold leading-relaxed text-slate-300">
+            <p id="modalBody" class="text-sm font-normal leading-relaxed text-slate-300">
                 Documentation details...
             </p>
-            <div class="pt-4 border-t-2 border-term-border flex justify-end space-x-3">
-                <button onclick="closeModal()" class="px-4 py-2 border-2 border-term-border bg-term-bg hover:bg-term-accent hover:text-term-bgDark font-bold text-xs text-slate-200">
+            <div class="pt-4 border-t border-term-border flex justify-end space-x-3 font-mono text-xs">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-term-border bg-term-bgDark text-slate-300 hover:bg-slate-800 transition font-semibold">
                     RETURN
                 </button>
-                <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 border-2 border-term-border bg-term-accent text-term-bgDark hover:bg-slate-200 font-bold text-xs inline-block">
-                    VIEW_GITHUB_REPO ►
+                <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg border border-term-accent bg-term-accent text-term-bgDark font-bold hover:bg-white sleek-button flex items-center gap-1">
+                    <span>VIEW_GITHUB_REPO</span> ►
                 </a>
             </div>
         </div>
     </div>
 
-    <footer class="mt-16 border-t-4 border-term-border bg-term-card py-6 text-xs font-bold text-slate-300">
+    <!-- FOOTER -->
+    <footer class="mt-20 border-t border-term-border bg-term-bgDark/80 py-8 text-xs font-mono text-slate-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 © 2026 WAYNE_DUMAIS // RETRO_CONSOLE_PORTFOLIO
             </div>
-            <div class="flex space-x-4">
-                <a href="https://github.com/wdumais-cloud/wdumais-cloud" target="_blank" rel="noopener noreferrer" class="border-b border-term-border hover:text-term-accent px-1">GITHUB</a>
-                <a href="https://www.linkedin.com/in/wayne-dumais" target="_blank" rel="noopener noreferrer" class="border-b border-term-border hover:text-term-accent px-1">LINKEDIN</a>
-                <a href="https://www.skool.com/mydfir" target="_blank" rel="noopener noreferrer" class="border-b border-term-border hover:text-term-accent px-1">THEFORGE</a>
-                <a href="https://www.skool.com/signup?ref=9f708ec2eaf84771b394724193483962" target="_blank" rel="noopener noreferrer" class="border-b border-term-border hover:text-term-accent px-1">AFFILIATE</a>
+            <div class="flex space-x-6">
+                <a href="https://github.com/wdumais-cloud/wdumais-cloud" target="_blank" rel="noopener noreferrer" class="hover:text-term-accent transition">GITHUB</a>
+                <a href="https://www.linkedin.com/in/wayne-dumais" target="_blank" rel="noopener noreferrer" class="hover:text-term-accent transition">LINKEDIN</a>
+                <a href="https://www.skool.com/mydfir" target="_blank" rel="noopener noreferrer" class="hover:text-term-accent transition">THEFORGE</a>
+                <a href="https://www.skool.com/signup?ref=9f708ec2eaf84771b394724193483962" target="_blank" rel="noopener noreferrer" class="hover:text-term-accent transition">AFFILIATE</a>
             </div>
         </div>
     </footer>
@@ -521,55 +513,54 @@ index=win_logs EventCode=4688 OR EventCode=1
     <script>
         // 1. Interactive Terminal Mechanics
         const commandMap = {
-            'whoami': 'OPERATOR: Wayne Dumais | SEC_ROLE: Security Operations Centre Analyst',
-            'sysinfo': 'OS: Retro-Cyber-OS v2.04 | ARCH: x86_64 | UPTIME: 99.98% | STATUS: NOMINAL',
-            'certifications': 'CERTIFICATIONS: CompTIA Security+, Network+, CySA+',
-            'certs': 'CERTIFICATIONS: CompTIA Security+, Network+, CySA+'
+            'whoami': 'OPERATOR: Wayne Dumais | ROLE: Security Operations Centre Analyst / GRC',
+            'sysinfo': 'OS: CyberLab-OS v2.04 | KERNEL: 6.1.0-Security-amd64 | UPTIME: 99.98% | STATUS: NOMINAL',
+            'certs': 'ACTIVE:(CompTIA), Network+, Security+, CySA+',
+            'certifications': 'ACTIVE:(CompTIA), Network+, Security+, CySA+'
         };
 
         function runCommand(cmd) {
-            const outputContainer = document.getElementById('terminalOutput');
-            const promptInput = document.getElementById('terminalPromptInput');
+            const terminalOutput = document.getElementById('terminalOutput');
             const terminalBody = document.getElementById('terminalBody');
-            
-            promptInput.innerText = cmd;
 
-            setTimeout(() => {
-                if (cmd === 'clear') {
-                    outputContainer.innerHTML = '';
-                    promptInput.innerText = '';
-                    return;
-                }
-
-                const response = commandMap[cmd] || `Command not recognized: '${cmd}'. Available: whoami, sysinfo, certs, clear`;
-                
-                const newEntry = document.createElement('div');
-                newEntry.className = "space-y-1 mb-2";
-                newEntry.innerHTML = `
-                    <div class="text-term-accent font-bold">root@cyber-node:~# ${cmd}</div>
-                    <div class="text-slate-300 font-medium">${response}</div>
-                `;
-                outputContainer.appendChild(newEntry);
-                promptInput.innerText = '';
-                terminalBody.scrollTop = terminalBody.scrollHeight;
-            }, 150);
-        }
-
-        // 2. Filter Functionality for Labs
-        function filterLabs(category) {
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-term-accent', 'text-term-bgDark');
-                btn.classList.add('bg-term-card', 'text-slate-300');
-            });
-            
-            const activeBtn = document.querySelector(`[data-filter="${category}"]`);
-            if(activeBtn) {
-                activeBtn.classList.remove('bg-term-card', 'text-slate-300');
-                activeBtn.classList.add('bg-term-accent', 'text-term-bgDark');
+            if (cmd === 'clear') {
+                terminalOutput.innerHTML = '';
+                return;
             }
 
-            const cards = document.querySelectorAll('.lab-card');
+            const commandLine = document.createElement('div');
+            commandLine.className = 'font-bold text-term-accent';
+            commandLine.innerHTML = `root@cyber-node:~# <span class="text-slate-200 font-normal">${cmd}</span>`;
+
+            const responseLine = document.createElement('div');
+            responseLine.className = 'text-slate-300 pl-2 border-l-2 border-term-accent/40 my-1 font-mono text-xs leading-relaxed';
+            
+            if (commandMap[cmd]) {
+                responseLine.textContent = commandMap[cmd];
+            } else {
+                responseLine.textContent = `bash: command not found: ${cmd}. Try running: whoami, sysinfo, certs, clear`;
+            }
+
+            terminalOutput.appendChild(commandLine);
+            terminalOutput.appendChild(responseLine);
+
+            // Auto-scroll terminal to bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // 2. Lab Module Filter Mechanics
+        function filterLabs(category) {
+            const cards = document.querySelectorAll('#labsGrid .lab-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.className = 'filter-btn active px-3.5 py-1.5 rounded-lg border border-term-accent bg-term-accent text-term-bgDark font-bold shadow-glow-sm';
+                } else {
+                    btn.className = 'filter-btn px-3.5 py-1.5 rounded-lg border border-term-border bg-term-card/80 text-slate-300 hover:border-term-accent hover:text-term-accent transition';
+                }
+            });
+
             cards.forEach(card => {
                 if (category === 'all' || card.getAttribute('data-category') === category) {
                     card.style.display = 'flex';
@@ -580,9 +571,9 @@ index=win_logs EventCode=4688 OR EventCode=1
         }
 
         // 3. Modal Controls
-        function openModal(title, description, githubUrl) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalBody').innerText = description;
+        function openModal(title, bodyText, githubUrl) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = bodyText;
             document.getElementById('modalGithubLink').href = githubUrl;
             document.getElementById('labModal').classList.remove('hidden');
         }
@@ -591,35 +582,30 @@ index=win_logs EventCode=4688 OR EventCode=1
             document.getElementById('labModal').classList.add('hidden');
         }
 
-        // 4. Copy Snippet Functionality
-        function copySnippet(elementId, btn) {
+        // 4. Code Snippet Copy Functionality
+        function copySnippet(elementId, btnElement) {
             const codeText = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(codeText).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'COPIED!';
+            
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const originalText = btnElement.innerText;
+                btnElement.innerText = 'COPIED!';
+                btnElement.classList.add('bg-term-accentEmerald', 'text-slate-950', 'border-term-accentEmerald');
+                
                 setTimeout(() => {
-                    btn.innerText = originalText;
-                }, 1500);
-            });
-        }
-
-        // 5. CRT Toggle
-        let crtActive = true;
-        function toggleCRT() {
-            crtActive = !crtActive;
-            const scanlines = document.getElementById('scanlineLayer');
-            const crtOverlay = document.getElementById('crtOverlayLayer');
-            const btn = document.getElementById('crtToggleBtn');
-
-            if (crtActive) {
-                scanlines.style.display = 'block';
-                crtOverlay.style.display = 'block';
-                btn.innerText = '[CRT: ON]';
-            } else {
-                scanlines.style.display = 'none';
-                crtOverlay.style.display = 'none';
-                btn.innerText = '[CRT: OFF]';
+                    btnElement.innerText = originalText;
+                    btnElement.classList.remove('bg-term-accentEmerald', 'text-slate-950', 'border-term-accentEmerald');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text', err);
             }
+            
+            document.body.removeChild(tempTextArea);
         }
     </script>
 </body>
