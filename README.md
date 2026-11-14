@@ -23,7 +23,7 @@ My journey in computer science has led me to develop a passion for cybersecurity
 |-----------------------------------------------|----------------------------|
 | Phishing Email Investigation and Report Writing | <a href="https://github.com/wdumais-cloud/phishing-analysis-lab">Phishing Email Investigation and Report</a>|
 | Splunk Queries, Dashboards, Alerts and Reports  | <a href="https://github.com/wdumais-cloud/Splunk_Enterprise">Splunk Enterprise</a>|
-| Network Traffic Monitoring and Attack Detection | Coming Soon|
+| Vulnerability Management and Remediation        | <a href="">New Link Here</a>|
 | Security Automation with Shuffle SOAR         | Coming Soon|
 | Incident Response Planning and Execution      | Coming Soon|
 | Case Management with TheHive                  | Coming Soon|
